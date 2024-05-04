@@ -4,6 +4,7 @@
     "com.meta.xr.sdk.interaction": "63.0.0",
     "com.meta.xr.sdk.interaction.ovr": "63.0.0",
     "com.meta.xr.sdk.platform": "63.0.0",
+    "com.meta.xr.simulator": "64.0.0",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.ide.rider": "3.0.25",
     "com.unity.ide.visualstudio": "2.0.21",
