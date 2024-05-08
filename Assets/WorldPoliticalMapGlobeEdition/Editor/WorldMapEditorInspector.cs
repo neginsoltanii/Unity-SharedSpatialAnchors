@@ -1596,7 +1596,7 @@ namespace WPM {
             for (int i = 0; i < points.Length; i++) {
                 oldPoint = mapTransform.TransformPoint(points[i]);
                 float handleSize = HandleUtility.GetHandleSize(oldPoint) * HANDLE_SIZE;
-                newPoint = Handles.FreeMoveHandle(oldPoint, frontFaceQuaternion, handleSize, pointSnap,
+                newPoint = Handles.FreeMoveHandle(oldPoint, handleSize, pointSnap,
                     (handleControlID, position, rotation, size, eventType) => {
                         controlIds[i] = handleControlID;
                         Handles.DotHandleCap(handleControlID, position, rotation, size, eventType);
@@ -1798,7 +1798,7 @@ namespace WPM {
             Vector3 cityPos = _map.cities[_editor.cityIndex].localPosition;
             Vector3 oldPoint = mapTransform.TransformPoint(cityPos);
             float handleSize = HandleUtility.GetHandleSize(oldPoint) * HANDLE_SIZE * 2.0f;
-            Vector3 newPoint = Handles.FreeMoveHandle(oldPoint, frontFaceQuaternion, handleSize, pointSnap,
+            Vector3 newPoint = Handles.FreeMoveHandle(oldPoint, handleSize, pointSnap,
                                             (handleControlID, position, rotation, size, eventType) => {
                                                 Handles.RectangleHandleCap(handleControlID, position, rotation, size, eventType);
                                             });
@@ -1877,7 +1877,7 @@ namespace WPM {
             Vector3 mountPointPos = _map.mountPoints[_editor.mountPointIndex].localPosition;
             Vector3 oldPoint = mapTransform.TransformPoint(mountPointPos);
             float handleSize = HandleUtility.GetHandleSize(oldPoint) * HANDLE_SIZE * 2.0f;
-            Vector3 newPoint = Handles.FreeMoveHandle(oldPoint, frontFaceQuaternion, handleSize, pointSnap,
+            Vector3 newPoint = Handles.FreeMoveHandle(oldPoint, handleSize, pointSnap,
                                             (handleControlID, position, rotation, size, eventType) => {
                                                 Handles.RectangleHandleCap(handleControlID, position, rotation, size, eventType);
                                             });
