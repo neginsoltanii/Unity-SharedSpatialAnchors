@@ -622,8 +622,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: /Users/negin/Documents/user.keystore
-  AndroidKeyaliasName: usertest
+  AndroidKeystoreName: '{inproject}: user.keystore'
+  AndroidKeyaliasName: 
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
