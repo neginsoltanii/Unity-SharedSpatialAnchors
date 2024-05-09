@@ -20,7 +20,7 @@ using WPM.Poly2Tri;
 using WPM.PolygonTools;
 using WPM.ClipperLib;
 using TMPro;
-//using Oculus;
+using Oculus;
 
 #if UNITY_EDITOR
 using UnityEditor;
