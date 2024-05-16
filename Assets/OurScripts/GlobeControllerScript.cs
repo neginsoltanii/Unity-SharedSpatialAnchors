@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using WPM;
+using Photon.Pun;
 
-public class GlobeControllerScript : MonoBehaviour
+public class GlobeControllerScript : MonoBehaviourPun  // Inherit from MonoBehaviourPun
 {
     
     public DataManager dataManager;
-    
 
     public float rotateSpeed = 10f; // degrees per second
     float step;
@@ -26,27 +26,12 @@ public class GlobeControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Test code from g
-        if (OVRInput.GetUp(OVRInput.RawButton.Y) || OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
-        {
-            colorizeScript.ColorizeCountries(selectedYear);
-            Debug.Log("Hello From inside the if conidition");
-            //colorizeScript.map.ToggleCountrySurface("Brazil", true, Color.green);
-        }
+        if (!photonView.IsMine) return; // If it's not the local player's object, don't execute the input code
 
-        // Handle year selection logic
-        if (OVRInput.GetUp(OVRInput.RawButton.A))
-        {
-            selectedYear = Mathf.Max(selectedYear - 1, 1991); // Adjust year bounds as needed
-            Debug.Log("Selected Year:" + selectedYear);
-            colorizeScript.ColorizeCountries(selectedYear);
-        }
-        else if (OVRInput.GetUp(OVRInput.RawButton.B))
-        {
-            selectedYear = Mathf.Min(selectedYear + 1, 2021); // Adjust year bounds as needed
-            Debug.Log("Selected Year:" + selectedYear);
-            colorizeScript.ColorizeCountries(selectedYear);
-        }
+        // Handle color change or year selection input
+        HandleInput();
+
+        
         //End test
         //// Check if there is a connected gamepad
         //if (Gamepad.current != null)
@@ -83,19 +68,101 @@ public class GlobeControllerScript : MonoBehaviour
         /// Rotate with the thumbsticks
 
         // Calculate a proportion in the rotation (degrees per second)
+
+        if (!photonView.IsMine) return; // If it's not the local player's object, don't execute the rotation code
+
         step = rotateSpeed * Time.deltaTime;
+
         if (OVRInput.Get(OVRInput.RawButton.RThumbstickLeft))
         {
-            transform.Rotate(0, step, 0);
-            Debug.Log("Right Thumbstick detected - Left");
+            RotateLeft();
         }
 
         if (OVRInput.Get(OVRInput.RawButton.RThumbstickRight))
         {
-            transform.Rotate(0, -step, 0);
-            Debug.Log("Right Thumbstick detected - Right");
+            RotateRight();
         }
 
     }
-        
+
+    
+    void HandleInput()
+    {
+        //Test code from g
+        // Handle color change input
+        if (OVRInput.GetUp(OVRInput.RawButton.Y) || OVRInput.Get(OVRInput.RawButton.RIndexTrigger))
+        {
+            photonView.RPC("ColorizeCountriesRPC", RpcTarget.All, selectedYear); // Call RPC to colorize countries for all players
+            Debug.Log("Hello From inside the if conidition");
+            //colorizeScript.map.ToggleCountrySurface("Brazil", true, Color.green);
+        }
+
+        // Handle year selection logic
+        if (OVRInput.GetUp(OVRInput.RawButton.A))
+        {
+            SelectPreviousYear();
+        }
+        else if (OVRInput.GetUp(OVRInput.RawButton.B))
+        {
+            SelectNextYear();
+        }
+    }
+
+    void SelectPreviousYear()
+    {
+        selectedYear = Mathf.Max(selectedYear - 1, 1991); // Adjust year bounds as needed
+        photonView.RPC("UpdateSelectedYearRPC", RpcTarget.All, selectedYear); // Call RPC to update selected year for all players
+    }
+
+    void SelectNextYear()
+    {
+        selectedYear = Mathf.Min(selectedYear + 1, 2021); // Adjust year bounds as needed
+        photonView.RPC("UpdateSelectedYearRPC", RpcTarget.All, selectedYear); // Call RPC to update selected year for all players
+    }
+
+    [PunRPC]
+    void UpdateSelectedYearRPC(int year)
+    {
+        selectedYear = year;
+        Debug.Log("Selected Year: " + selectedYear);
+        colorizeScript.ColorizeCountries(selectedYear);
+    }
+
+    [PunRPC]
+    void ColorizeCountriesRPC(int year)
+    {
+        Debug.Log("Colorizing countries for year: " + year);
+        colorizeScript.ColorizeCountries(year);
+    }
+
+
+
+
+    [PunRPC] // Mark the RPC methods with this attribute
+    void RotateLeft()
+    {
+        transform.Rotate(0, step, 0);
+        photonView.RPC("RotateLeftRPC", RpcTarget.Others); // Send RPC to other clients
+        Debug.Log("Right Thumbstick detected - Left");
+    }
+
+    [PunRPC]
+    void RotateRight()
+    {
+        transform.Rotate(0, -step, 0);
+        photonView.RPC("RotateRightRPC", RpcTarget.Others); // Send RPC to other clients
+        Debug.Log("Right Thumbstick detected - Right");
+    }
+
+    [PunRPC]
+    void RotateLeftRPC()
+    {
+        transform.Rotate(0, step, 0);
+    }
+
+    [PunRPC]
+    void RotateRightRPC()
+    {
+        transform.Rotate(0, -step, 0);
+    }
 }

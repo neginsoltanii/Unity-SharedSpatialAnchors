@@ -49,6 +49,12 @@ MonoBehaviour:
   - SendSessionStart
   - CheckForLocalAnchors
   - OnColocatedAck
+  - RotateLeft
+  - RotateLeftRPC
+  - RotateRight
+  - RotateRightRPC
+  - ColorizeCountriesRPC
+  - UpdateSelectedYearRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
