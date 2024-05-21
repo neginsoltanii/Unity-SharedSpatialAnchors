@@ -19,7 +19,7 @@ public class SliderSyncDirect : MonoBehaviourPunCallbacks, IPunObservable
         {
             // Setting the Slider's minimum and maximum values
             yearSlider.minValue = 1990;
-            yearSlider.maxValue = 2023;
+            yearSlider.maxValue = 2018;
             yearSlider.onValueChanged.AddListener(delegate { UpdateYearText(); });
         }
 
